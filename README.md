@@ -1,6 +1,6 @@
-#Chatbot using seq2seq model
+# Chatbot using seq2seq model
 
-###Dataset
+### Dataset
 
 Cornell Movie Dialogue Corpus
 ``https://www.cs.cornell.edu/~cristian/Cornell_Movie-Dialogs_Corpus.html``
@@ -10,7 +10,7 @@ Preprocessed data are uploaded in the directory.
 
 *Current Stage* - Upto Training the model
 
-####Requirement
+#### Requirement
 
 ``Tensorflow==1.0``
 

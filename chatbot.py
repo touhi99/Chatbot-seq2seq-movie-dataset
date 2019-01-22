@@ -405,3 +405,41 @@ for epoch in range(1, epochs+1):
 		break
 print("GameOver")
 
+# Part 4 ----- testing the seq2seq
+
+#LOading weights and running session
+checkpoint = "./chatbot_weights.ckpt"
+session = tf.InteractiveSession()
+session.run(tf.global_variables_initializer())
+saver = tf.train.Saver()
+saver.restore(session, checkpoint)
+
+# Converting questions from string to list of encoded int
+def convert_string2int(question, word2int):
+	question = clean_text(question)
+	return [word2int.get(word, word2int['<OUT>']) for word in question.split()]
+
+while(True):
+	question = input("You:")
+	if question == 'Goodbye':
+		break
+	question = convert_string2int(question, questionswords2int)
+	question = question + [questionswords2int['<PAD>']] * (20 - len(question))
+	fake_batch = np.zeros((batch_size, 20))
+	fake_batch[0] = question
+	predicted_answer = session.run(test_predictions, {input: fake_batch, keep_prob: 0.5})[0]
+	answer = ''
+	for i in np.argmax(predicted_answer, 1):
+		if answerswords2int[i] == 'i':
+			token = 'I'
+		elif answerswords2int[i] == '<EOS>':
+			token = '.'
+		elif answerswords2int[i] == '<OUT>':
+			token = 'out'
+		else:
+			token = ' ' + answerswords2int[i]
+		answer += token
+		if token == '.':
+			break
+	print('Chatbot: '+ answer)
+
